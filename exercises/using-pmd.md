@@ -6,3 +6,15 @@ You can use the default [rule base](https://github.com/pmd/pmd/blob/master/pmd-j
 
 ## Answer
 
+I found a true positive : 
+
+ClassWithOnlyPrivateConstructorsShouldBeFinal:	This class has only private constructors and may be final
+
+The solution is given in the issue, make it final 
+
+
+I found a false positive : 
+
+UncommentedEmptyConstructor:	Document empty constructor
+
+The empty constructor is not necessary, but it helps to understand the context by showing an implicit constructor.
