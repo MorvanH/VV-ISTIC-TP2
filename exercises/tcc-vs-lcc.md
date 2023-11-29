@@ -78,6 +78,4 @@ class Client {
         this.email = email;
     }
 }
-
-
 ```
