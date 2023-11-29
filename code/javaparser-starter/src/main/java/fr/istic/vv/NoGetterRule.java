@@ -1,9 +1,3 @@
-# Code of your exercise
-
-Here is our implementation of the rule, the issue is raised by printing the getter 
-into the standard output.
-
-```java
 package fr.istic.vv;
 
 
@@ -42,8 +36,3 @@ public class NoGetterRule extends VoidVisitorWithDefaults<Void> {
 
 }
 
-
-```
-
-This class has been tested in javaparser-starter with itself as source code to parse.
-The Test.java file should raise an issue.
