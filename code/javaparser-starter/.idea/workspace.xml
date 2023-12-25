@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0fd4c3d5-d118-4986-8a01-41ed72916766" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Test/Point.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Test/Test.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/istic/vv/CFGNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/istic/vv/TCCCalculator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/istic/vv/TCCNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/istic/vv/CyclomaticComplexityCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/istic/vv/CyclomaticComplexityCalculator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/istic/vv/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/istic/vv/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/istic/vv/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Test/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Test/Test.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +80,7 @@
       <workItem from="1701276537293" duration="61000" />
       <workItem from="1701685747073" duration="4422000" />
       <workItem from="1702283108856" duration="9982000" />
-      <workItem from="1703496963828" duration="12700000" />
+      <workItem from="1703496963828" duration="13127000" />
     </task>
     <servers />
   </component>
