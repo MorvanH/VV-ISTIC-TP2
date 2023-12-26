@@ -1,18 +1,20 @@
 package fr.istic.vv;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static java.lang.System.exit;
 
 public class CFGNode {
     enum NodeType{
         START,
         END,
-        IF,
-        WHILE,
-        FOR,
-        RETURN
+        COND,
+        RETURN,
+        BASIC
     }
 
-    private NodeType type;
+    private final NodeType type;
     private CFGNode left;
     private CFGNode right;
 
@@ -32,13 +34,13 @@ public class CFGNode {
 
     public void setNode(CFGNode newNode){
         switch(this.type){
-            case START, WHILE, FOR:
+            case START:
                 this.left = newNode;
                 break;
             case END:
                 System.out.println("Error: Node end cannot have children");
                 exit(1);
-            case IF:
+            case COND:
                 if(this.left == null || this.left.type == NodeType.END){
                     this.left = newNode;
                 }
@@ -51,54 +53,71 @@ public class CFGNode {
                 }
                 break;
             case RETURN:
-                if(this.left == null){
+                if (this.left == null) {
                     this.left = newNode;
                 }
                 else{
                     System.out.println("Error: Node already has a child");
                     exit(1);
                 }
+                break;
+            case BASIC:
+                if (this.left == null || this.left.type == NodeType.END) {
+                    this.left = newNode;
+                } else {
+                    System.out.println("Error: Node already has a child");
+                    exit(1);
+                }
+                break;
         }
     }
 
     public float getCyclomaticComplexity() {
-        int nbNodes = getNbNodes();
-        int nbEdges = getNbEdges();
+        int nbNodes = getNbNodes(new HashSet<>());
+        int nbEdges = getNbEdges(new HashSet<>());
         return nbEdges - nbNodes + 2;
     }
 
-    private int getNbNodes(){
+    private int getNbNodes(Set<CFGNode> visitedNodes){
+        if(visitedNodes.contains(this)){
+            return 0;
+        }
+        visitedNodes.add(this);
         switch (this.type){
             case START:
-                return 2 + this.left.getNbNodes(); // +2 for the start and end nodes
+                return 2 + this.left.getNbNodes(visitedNodes); // +2 for the start and end nodes
             case RETURN:
                 return 1;
-            case IF:
+            case COND:
                 if(this.right == null){
-                    return 1 + this.left.getNbNodes();
+                    return 1 + this.left.getNbNodes(visitedNodes);
                 }
                 else{
-                    return 1 + this.left.getNbNodes() + this.right.getNbNodes();
+                    return 1 + this.left.getNbNodes(visitedNodes) + this.right.getNbNodes(visitedNodes);
                 }
-            case WHILE, FOR:
-                return 1 + this.left.getNbNodes();
+            case BASIC:
+                return 1 + this.left.getNbNodes(visitedNodes);
         }
 
         return 0;
     }
 
-    private int getNbEdges(){
+    private int getNbEdges(Set<CFGNode> visitedNodes){
+        if(visitedNodes.contains(this)){
+            return 0;
+        }
+        visitedNodes.add(this);
         switch (this.type){
-            case START:
-                return 1 + this.left.getNbEdges();
+            case START, BASIC:
+                return 1 + this.left.getNbEdges(visitedNodes);
             case END:
                 return 0;
-            case IF:
+            case COND:
                 if(this.right == null){
-                    return 1 + this.left.getNbEdges();
+                    return 1 + this.left.getNbEdges(visitedNodes);
                 }
                 else{
-                    return 2 + this.left.getNbEdges() + this.right.getNbEdges();
+                    return 2 + this.left.getNbEdges(visitedNodes) + this.right.getNbEdges(visitedNodes);
                 }
             case RETURN:
                 return 1;

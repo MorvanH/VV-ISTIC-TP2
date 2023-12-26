@@ -1,24 +1,17 @@
 package fr.istic.vv;
 
-import com.github.javaparser.Problem;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.utils.SourceRoot;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         File file;
         if(args.length == 0) {
-            file = new File("/home/issameddine/Documents/DD/VV-ISTIC-TP2/code/javaparser-starter/src/main/java/Test");
+            //file = new File("/home/issameddine/Documents/DD/VV-ISTIC-TP2/code/javaparser-starter/src/main/java/Test");
+            file = new File("C:/Users/issam/git/VV-ISTIC-TP2/code/javaparser-starter/src/main/java/Test");
         } else {
             file = new File(args[0]);
         }

@@ -37,12 +37,15 @@ public class TCCCalculator extends VoidVisitorAdapter<Void> {
 
         // Create all TCC nodes
         for(MethodDeclaration method : declaration.getMethods()) {
+            String currentMethod = method.getNameAsString(); // Used for debug
             methodInstanceVariable = new ArrayList<>();
             method.getBody().ifPresent(body -> body.accept(this, null));
             nodes.add(new TCCNode(methodInstanceVariable));
-
-            System.out.println("Method: " + method.getNameAsString() + " - TCC: " + getTCC());
         }
+
+        // Print TCC
+        String currentClass = declaration.getFullyQualifiedName().get(); // Used for debug
+        System.out.println("Class: " + currentClass + " - TCC: " + getTCC());
     }
 
     @Override

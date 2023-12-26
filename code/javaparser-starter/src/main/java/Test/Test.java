@@ -45,9 +45,7 @@ public class Test {
         if(a > b) {
             return a;
         }
-        else {
-            return b;
-        }
+        return b;
     }
 
     public static int CFGIfElseTest(int a) {
@@ -83,6 +81,7 @@ public class Test {
             if(i - b == 0) {
                 return i;
             }
+            b--;
         }
 
         return a;

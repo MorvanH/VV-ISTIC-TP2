@@ -1,20 +1,17 @@
 package fr.istic.vv;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import com.github.javaparser.ast.visitor.VoidVisitorWithDefaults;
-
-import java.util.ArrayList;
-import java.util.List;
 
 class CyclomaticComplexityCalculator extends VoidVisitorAdapter<Void> {
     private CFGNode root;
     private CFGNode currentNode;
     private CFGNode lastNode;
 
-    private String currentMethod;
     public float getCyclomaticComplexity() {
         return root.getCyclomaticComplexity();
     }
@@ -28,14 +25,8 @@ class CyclomaticComplexityCalculator extends VoidVisitorAdapter<Void> {
 
     @Override
     public void visit(ClassOrInterfaceDeclaration declaration, Void arg) {
-        List<String> attributes = declaration.getFields()
-                .stream()
-                .map(FieldDeclaration::getVariables)
-                .flatMap(List::stream)
-                .map(v -> v.getName().asString())
-                .toList();
         for(MethodDeclaration method : declaration.getMethods()) {
-            currentMethod = method.getNameAsString();
+            String currentMethod = method.getNameAsString();
             this.root = new CFGNode(CFGNode.NodeType.START);
             this.currentNode = this.root;
             this.lastNode = new CFGNode(CFGNode.NodeType.END);
@@ -49,40 +40,55 @@ class CyclomaticComplexityCalculator extends VoidVisitorAdapter<Void> {
 
     @Override
     public void visit(IfStmt stmt, Void arg) {
-        CFGNode ifNode = new CFGNode(CFGNode.NodeType.IF);
+        CFGNode ifNode = new CFGNode(CFGNode.NodeType.COND);
         currentNode.setNode(ifNode);
         currentNode = ifNode;
 
         stmt.getThenStmt().accept(this, null);
+        currentNode = ifNode;
         if(stmt.hasElseBlock()){
-            currentNode = ifNode;
             stmt.getElseStmt().get().accept(this, null);
         }
     }
 
     @Override
-    public void visit(BlockStmt stmt, Void arg) {
-        for(Statement s : stmt.getStatements()){
-            s.accept(this, null);
-        }
-    }
-
-    @Override
     public void visit(WhileStmt stmt, Void arg) {
-        CFGNode whileNode = new CFGNode(CFGNode.NodeType.WHILE);
+        CFGNode whileNode = new CFGNode(CFGNode.NodeType.COND);
         currentNode.setNode(whileNode);
         currentNode = whileNode;
-
         stmt.getBody().accept(this, null);
+
+        // If the condition is false, the loop is not executed
+        currentNode.setNode(whileNode);
+        currentNode = whileNode;
     }
 
     @Override
     public void visit(ForStmt stmt, Void arg) {
-        CFGNode forNode = new CFGNode(CFGNode.NodeType.FOR);
-        currentNode.setNode(forNode);
-        currentNode = forNode;
-
+        CFGNode assignNode = new CFGNode(CFGNode.NodeType.BASIC);
+        currentNode.setNode(assignNode);
+        currentNode = assignNode;
+        CFGNode forCondNode = new CFGNode(CFGNode.NodeType.COND);
+        currentNode.setNode(forCondNode);
+        currentNode = forCondNode;
         stmt.getBody().accept(this, null);
+
+        // If the condition is false, the loop is not executed
+        currentNode.setNode(forCondNode);
+        currentNode = forCondNode;
+
+    }
+
+    @Override
+    public void visit(DoStmt stmt, Void arg) {
+        CFGNode doNode = new CFGNode(CFGNode.NodeType.COND);
+        currentNode.setNode(doNode);
+        currentNode = doNode;
+        stmt.getBody().accept(this, null);
+
+        // If the condition is false, the loop is not executed
+        currentNode.setNode(doNode);
+        currentNode = doNode;
     }
 
     @Override
@@ -91,5 +97,13 @@ class CyclomaticComplexityCalculator extends VoidVisitorAdapter<Void> {
         returnNode.setNode(lastNode);
         currentNode.setNode(returnNode);
         currentNode = returnNode;
+    }
+
+    @Override
+    public void visit(ExpressionStmt stmt, Void arg) {
+        CFGNode blockNode = new CFGNode(CFGNode.NodeType.BASIC);
+        currentNode.setNode(blockNode);
+        currentNode = blockNode;
+        blockNode.setNode(lastNode);
     }
 }
