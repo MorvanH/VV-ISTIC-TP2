@@ -23,3 +23,31 @@ Use your rule with different projects and describe you findings below. See the [
 
 ## Answer
 
+Here is the XPath to found all three or more nested `if` statements : `//IfStatement[.//IfStatement[.//IfStatement]]`
+
+It gives me the following xml rule :
+
+```xml
+<rule name="NestedIfStatements"
+language="java"
+message="Avoid nested if statements (3 levels)"
+class="net.sourceforge.pmd.lang.rule.XPathRule">
+<description>
+<![CDATA[
+Avoid the use of deeply nested if statements.
+]]>
+</description>
+<priority>3</priority>
+<properties>
+<property name="xpath">
+<value><![CDATA[
+                //IfStatement[.//IfStatement[.//IfStatement]]
+            ]]></value>
+</property>
+</properties>
+</rule>
+```
+
+I used it on `commons-collections` by Apache and even here, the rule raised multiple warning about nested if.
+
+That shows how usefully could be a static analysis in the workflow of pipelines used for integration of any company.
